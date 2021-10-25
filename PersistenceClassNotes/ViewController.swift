@@ -8,8 +8,8 @@
 import UIKit
 
 public struct Contact: Codable {
-    var name: String
-    var age: Int
+   public var name: String
+   public var age: Int
 }
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -21,7 +21,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     @IBOutlet weak var tableViewOutlet: UITableView!
     
-    var contacts = [Contact]()
+    var contacts: [Contact] = []
     
     
     override func viewDidLoad() {
@@ -37,6 +37,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let decoder = JSONDecoder()
             if let decoded = try? decoder.decode([Contact].self, from: items){
                 contacts = decoded
+                print("reading data")
             }
         }
         // Do any additional setup after loading the view.
@@ -53,18 +54,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
 
-    
+    //SAVE ACTION
     @IBAction func addAction(_ sender: UIButton) {
      
         let encoder = JSONEncoder()
         
         if let encoded = try? encoder.encode(contacts) {
             
-            UserDefaults.standard.set(contacts, forKey: "theContacts2")}
+            UserDefaults.standard.set(contacts, forKey: "theContacts2")
+            
+        }
     }
     
     @IBAction func frAddAction(_ sender: UIButton) {
         contacts.append(Contact(name: nameOutlet.text!, age: Int(ageOutlet.text!)!))
+        
+        let encoder = JSONEncoder()
+        
+        if let encoded = try? encoder.encode(contacts) {
+            
+            UserDefaults.standard.set(contacts, forKey: "theContacts2")
+            
+        }
+        
         tableViewOutlet.reloadData()
     }
 }
